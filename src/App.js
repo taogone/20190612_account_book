@@ -3,8 +3,11 @@ import "./App.css";
 import AccountBookForm from "./components/AccountBookForm";
 
 class App extends Component {
+  add = data => {
+    console.log(data);
+  };
   render() {
-    return <AccountBookForm />;
+    return <AccountBookForm onAdd={this.add} />;
   }
 }
 

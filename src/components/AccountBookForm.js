@@ -7,6 +7,13 @@ const getCurrentTimetoString = () => {
 };
 
 class AccountBookForm extends Component {
+  // 에러 방지를 위해 기본 값 설정
+  static defaultProps = {
+    onAdd: () => {
+      console.log("onAdd is not defined.");
+    }
+  };
+
   state = {
     type: "지출",
     price: "",
@@ -22,11 +29,27 @@ class AccountBookForm extends Component {
     });
   };
 
+  // form 태그 submit 이벤트 처리
+  submit = event => {
+    // state 값을 초기화하는 페이지 리로딩 방지
+    event.preventDefault();
+    // 부모 component의 add()를 실행
+    this.props.onAdd(this.state);
+    // 컴포넌트 state를 기본값으로 초기화
+    this.setState({
+      type: "지출",
+      price: "",
+      usage: "",
+      date: ""
+    });
+  };
+
   render() {
     return (
-      <form>
+      <form onSubmit={this.submit}>
         <select name="type" onChange={this.changeInput}>
           <option defaultValue>지출</option>
+          <option>수입</option>
         </select>
         <input
           placeholder="금액"
@@ -37,24 +60,23 @@ class AccountBookForm extends Component {
         />
         <input
           placeholder="사용목적"
-          type="usaage"
+          name="usage"
           value={this.state.usage}
           onChange={this.changeInput}
         />
-        <div>
+        <button type="submit">추가</button>
+        {/* <div>
           <span>타입 : {this.state.type}</span>
           <br />
           <span>
             금액 : {this.state.price !== "" ? `${this.state.price}원` : "0원"}
           </span>
           <br />
-          <span>
-            용도 : {this.state.usage !== "" ? `${this.state.usage}원` : "_"}
-          </span>
+          <span>용도 : {this.state.usage !== "" ? this.state.usage : "_"}</span>
           <br />
           <span>날짜 : {this.state.date}</span>
           <br />
-        </div>
+        </div> */}
       </form>
     );
   }
